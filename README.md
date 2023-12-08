@@ -34,3 +34,26 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+## Key Features
+
+- Authentication with Clerk
+- Real-time messaging using Socket.io
+- Send attachments as messages using UploadThing
+- Delete & Edit messages in real time for all users
+- Create Text, Audio and Video call Channels
+- 1:1 conversation between members
+- Member management (Kick, Role change Guest / Moderator)
+- Server creation and customization
+- Beautiful UI using TailwindCSS and ShadcnUI
+- Full responsivity and mobile UI
+- Light / Dark mode
+- Websocket fallback: Polling with alerts 
+- MySQL database 
+
+## Possible Implementations
+
+- Unique invite link generation & full working invite system
+- 1:1 video calls between members
+- Infinite loading for messages in batches of 10 (@tanstack/query)
