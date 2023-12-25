@@ -2,6 +2,7 @@
 
 import { Fragment } from "react";
 import { Member, Message, Profile } from "@prisma/client";
+import { useChatSocket } from "@/hooks/use-chat-socket";
 import { Loader2, ServerCrash } from "lucide-react";
 import { format } from "date-fns";
 
@@ -42,6 +43,8 @@ export const ChatMessages = ({
   type,
 }: ChatMessagesProps) => {
   const queryKey = `chat:${chatId}`;
+  const addKey = `chat:${chatId}:messages`;
+  const updateKey = `chat:${chatId}:messages:update` 
 
   const {
     data,
@@ -56,6 +59,9 @@ export const ChatMessages = ({
     paramValue,
   });
 
+  const socketData=useChatSocket({ queryKey, addKey, updateKey });
+  console.log(socketData);
+  
   if (status === "pending") {
     return (
       <div className="flex flex-col flex-1 justify-center items-center">
