@@ -37,6 +37,15 @@ const ChannelIdPage = async ({
     }
   });
 
+  const members= await db.member.findMany({
+    where: {
+      serverId: params.serverId,
+    },
+    select: {
+      profileId: true,
+    }
+  });
+
   if (!channel || !member) {
     redirect("/");
   }

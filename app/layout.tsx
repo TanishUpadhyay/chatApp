@@ -32,7 +32,7 @@ export default function RootLayout({
             <SocketProvider >
               <ModalProvider />
                 <QueryProvider>
-                  {children}
+                    {children}
                 </QueryProvider>
             </SocketProvider >
           </ThemeProvider>

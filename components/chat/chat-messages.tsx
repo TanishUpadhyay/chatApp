@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment , useRef, ElementRef  } from "react";
+import { Fragment , useRef, ElementRef, useEffect  } from "react";
 import { Member, Message, Profile } from "@prisma/client";
 import { useChatSocket } from "@/hooks/use-chat-socket";
 import { Loader2, ServerCrash } from "lucide-react";
@@ -10,6 +10,7 @@ import { useChatQuery } from "@/hooks/use-chat-query";
 
 import { ChatWelcome } from "./chat-welcome";
 import { ChatItem } from "./chat-item";
+import axios from "axios";
 
 const DATE_FORMAT = "d MMM yyyy, HH:mm";
 
@@ -48,6 +49,7 @@ export const ChatMessages = ({
 
   const chatRef = useRef<ElementRef<"div">>(null);
   const bottomRef = useRef<ElementRef<"div">>(null);
+  const serverId= socketQuery.serverId;
 
   const {
     data,
@@ -56,11 +58,13 @@ export const ChatMessages = ({
     isFetchingNextPage,
     status,
   } = useChatQuery({
+    serverId,
     queryKey,
     apiUrl,
     paramKey,
     paramValue,
   });
+
 
  useChatSocket({ queryKey, addKey, updateKey });
  useChatScroll({
@@ -120,6 +124,7 @@ export const ChatMessages = ({
         {data?.pages?.map((group, i) => (
           <Fragment key={i}>
             {group.items.map((message: MessageWithMemberWithProfile) => (
+              
               <ChatItem
               key={message.id}
               id={message.id}

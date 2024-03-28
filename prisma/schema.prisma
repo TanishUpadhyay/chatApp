@@ -44,14 +44,19 @@ enum MemberRole {
   GUEST
 }
 
+enum Status {
+  ACCEPTED
+  PENDING
+  DECLINED
+}
+
 model Member {
   id String @id @default(uuid())
   role MemberRole @default(GUEST)
   profileId String
   profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   serverId String
-  server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
-
+  server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)	
   messages Message[]
   directMessages DirectMessage[]
   conversationsInitiated Conversation[] @relation("MemberOne")
@@ -90,6 +95,7 @@ model Message {
   id String @id @default(uuid())
   content String @db.String
   fileUrl String? @db.String
+  blockMemberIds String[]
   memberId String
   member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
   channelId String
@@ -125,4 +131,11 @@ model DirectMessage {
   updatedAt DateTime @updatedAt
   @@index([memberId])
   @@index([conversationId])
+}
+
+model Request{
+  id String @id @default(uuid())
+  from String @db.String 
+  to String @db.String 
+  status Status @default(PENDING)
 }

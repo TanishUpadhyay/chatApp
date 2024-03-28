@@ -3,6 +3,7 @@ import { Message } from "@prisma/client";
 
 import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
+import { currentMemberId } from "@/lib/current-member";
 
 const MESSAGES_BATCH = 10;
 
@@ -11,10 +12,14 @@ export async function GET(
 ) {
   try {
     const profile = await currentProfile();
+    
     const { searchParams } = new URL(req.url);
 
     const cursor = searchParams.get("cursor");
     const channelId = searchParams.get("channelId");
+    const serverId = searchParams.get("serverId");
+    const currentMember_id=await currentMemberId({serverId:serverId ?? ""});
+    console.log('current member id in api/get is::::' + currentMember_id);
 
     if (!profile) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -72,12 +77,23 @@ export async function GET(
       nextCursor = messages[MESSAGES_BATCH - 1].id;
     }
 
+    const filtered_messages = messages.filter((message) => {
+      if (!message.blockMemberIds.includes(currentMember_id ?? "")) {
+        return message;
+      }
+      else 
+      {
+        console.log("blocked are:"+message.blockMemberIds);
+        return null;
+      }
+    });
+
     return NextResponse.json({
-      items: messages,
+      items: filtered_messages,
       nextCursor
     });
-  } catch (error) {
-    console.log("[MESSAGES_GET]", error);
-    return new NextResponse("Internal Error", { status: 500 });
-  }
+    } catch (error) {
+      console.log("[MESSAGES_GET]", error);
+      return new NextResponse("Internal Error", { status: 500 });
+    }
 }

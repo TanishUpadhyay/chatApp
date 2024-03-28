@@ -14,9 +14,14 @@ export default async function handler(
 
   try {
     const profile = await currentProfilePages(req);
-    const { content, fileUrl } = req.body;
+    // const currentMember_id=currentMemberId();
+    console.log(req.body);
+    
+    const { content, fileUrl ,memberIds } = req.body;
     const { serverId, channelId } = req.query;
 
+    console.log('memberIds in messages post is::::' + memberIds);
+    
     if (!profile) {
       return res.status(401).json({ error: "Unauthorized" });
     }    
@@ -72,6 +77,7 @@ export default async function handler(
       data: {
         content,
         fileUrl,
+        blockMemberIds: memberIds,
         channelId: channelId as string,
         memberId: member.id,
       },
@@ -83,7 +89,8 @@ export default async function handler(
         }
       }
     });
-
+    console.log('saved message is::::' + JSON.stringify(message));
+    
     const channelKey = `chat:${channelId}:messages`;
 
     res?.socket?.server?.io?.emit(channelKey, message);
